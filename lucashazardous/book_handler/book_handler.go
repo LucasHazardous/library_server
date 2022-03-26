@@ -128,3 +128,31 @@ func (b *bookHandler) GetBook(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 	w.Write(jsonBytes)
 }
+
+type adminPanel struct {
+	password string
+}
+
+func NewAdminPanel() *adminPanel {
+	password, err := ioutil.ReadFile("./password.txt")
+	if err != nil || string(password) == "" {
+		panic("error reading password")
+	}
+	return &adminPanel{password: string(password)}
+}
+
+func (a adminPanel) AdminHandler(w http.ResponseWriter, r *http.Request) {
+	user, password, ok := r.BasicAuth()
+	if !ok || user != "admin" || password != a.password {
+		w.WriteHeader(http.StatusUnauthorized)
+		w.Write([]byte("401"))
+		return
+	}
+	adminPage, err := ioutil.ReadFile("./admin_static/index.html")
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte("unable to read admin panel"))
+		return
+	}
+	w.Write(adminPage)
+}
