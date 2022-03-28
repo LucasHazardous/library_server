@@ -21,6 +21,7 @@ type Book struct {
 type bookHandler struct {
 	sync.Mutex
 	library map[string]Book
+	panel   adminPanel
 }
 
 func (b *bookHandler) Books(w http.ResponseWriter, r *http.Request) {
@@ -39,6 +40,13 @@ func (b *bookHandler) Books(w http.ResponseWriter, r *http.Request) {
 }
 
 func (b *bookHandler) Post(w http.ResponseWriter, r *http.Request) {
+	user, password, ok := r.BasicAuth()
+	if !ok || user != "admin" || password != b.panel.password {
+		w.WriteHeader(http.StatusUnauthorized)
+		w.Write([]byte("401"))
+		return
+	}
+
 	bodyBytes, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
@@ -89,7 +97,7 @@ func (b *bookHandler) Get(w http.ResponseWriter, r *http.Request) {
 	w.Write(jsonBytes)
 }
 
-func NewBookHandlers() *bookHandler {
+func NewBookHandlers(panel *adminPanel) *bookHandler {
 	return &bookHandler{
 		library: map[string]Book{
 			"1": {
@@ -100,6 +108,7 @@ func NewBookHandlers() *bookHandler {
 				Id:     "1",
 			},
 		},
+		panel: *panel,
 	}
 }
 

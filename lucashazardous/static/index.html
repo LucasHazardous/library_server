@@ -8,10 +8,21 @@
 </head>
 <body>
     <h3>Welcome, reader</h3>
-    <p id="books"></p>
+    <ul id="books">
+
+    </ul>
     <script defer>
         const books = document.getElementById("books");
-        fetch("/books", {method: "GET"}).then(result => result.json().then(stringResult => books.innerText = JSON.stringify(stringResult))).catch(err => console.error(err));
+        fetch("/books", {method: "GET"})
+        .then(result => result.json().then((jsonResult) => {
+            jsonResult.forEach(element => {
+                const listElement = document.createElement('li');
+                console.log(element);
+                listElement.innerHTML = `<b>Title: ${element.title}</b> - Author: ${element.author}, Year: ${element.year}, Book Value: ${element.price}`;
+                books.appendChild(listElement);
+            });
+        }))
+        .catch(err => console.error(err));
     </script>
 </body>
 </html>

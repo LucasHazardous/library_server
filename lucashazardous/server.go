@@ -6,9 +6,8 @@ import (
 )
 
 func main() {
-
-	bookHandler := book_handler.NewBookHandlers()
 	adminPanel := book_handler.NewAdminPanel()
+	bookHandler := book_handler.NewBookHandlers(adminPanel)
 	fileServer := http.FileServer(http.Dir("./static"))
 
 	go http.Handle("/", http.StripPrefix("/", fileServer))
