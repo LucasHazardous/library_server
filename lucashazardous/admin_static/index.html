@@ -4,47 +4,9 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Library Admin Panel</title>
-
-    <script defer>
-        const title = document.getElementById("title");
-        const author = document.getElementById("author");
-        const price = document.getElementById("price");
-        const year = document.getElementById("year");
-
-        const password = document.getElementById("password");
-        const btnSubmit = document.getElementById("btnSubmit");
-
-        btnSubmit.addEventListener('click', async () => {
-            const res = await fetch('/', {
-                method: 'POST',
-                headers: {
-                    'Content-type': 'application/json',
-                    'Authorization': `admin:${password}`
-                },
-                body: JSON.stringify({
-                    title: title.value,
-                    author: author.value,
-                    price: price.value,
-                    year: year.value
-                })
-            });
-        });
-    </script>
+    <title>Admin Panel</title>
 </head>
 <body>
-    <h3>Welcome, admin</h3>
-    <div>
-        Title:
-        <input type="text" id="title"/><br/>
-        Author:
-        <input type="text" id="author"/><br/>
-        Price:
-        <input type="number" id="price"/><br/>
-        Year:
-        <input type="number" id="year"/><br/>
-        <input type="password" id="password"/>
-        <button id="btnSubmit">Submit</button>
-    </div>
+    <h3>Welcome Admin</h3>
 </body>
 </html>
